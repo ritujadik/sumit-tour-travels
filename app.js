@@ -115,15 +115,15 @@
   $$('.rope').forEach((el) => { el.innerHTML = ROPE; });
 
 
-  /* ---------- included tiles ---------- */
+  /* ---------- included tiles (simple) ---------- */
   if ($('#incGrid')) $('#incGrid').innerHTML = [
-    ['hotel', 'g-indigo', '3-star hotels', 'A hotel stay at every overnight stop. Do Dham uses hotels along the route.'],
-    ['train', 'g-teal', 'Surat to Surat by train', 'Non-A.C. train travel both ways. Nepal combines rail with a 2x2 AC bus.'],
-    ['meal', 'g-amber', 'Breakfast and dinner', 'Served daily at the hotel on every package.'],
-    ['rooms', 'g-green', 'Couple and family rooms', 'Comfortable rooms sized for couples and families.'],
-    ['van', 'g-sky', 'Tempo Traveller on the ground', '14-seater or 17-seater, depending on the package.'],
-    ['heat', 'g-ember', 'Centrally heated hotels', 'On both Kashmir routes, for cold Srinagar and Pahalgam nights.'],
-  ].map(([i, g, t, d]) => `<li class="${g}"><span class="ico">${ICO[i]}</span><b>${t}</b><span class="d">${d}</span></li>`).join('');
+    ['bed', '3-star hotels', 'A hotel stay at every overnight stop. Do Dham uses hotels along the route.'],
+    ['train', 'Surat to Surat by train', 'Non-A.C. train travel both ways. Nepal combines rail with a 2x2 AC bus.'],
+    ['meal', 'Breakfast and dinner', 'Served daily at the hotel on every package.'],
+    ['users', 'Couple and family rooms', 'Comfortable rooms sized for couples and families.'],
+    ['van', 'Tempo Traveller', '14-seater or 17-seater on the ground, depending on the package.'],
+    ['heat', 'Centrally heated hotels', 'On both Kashmir routes, for cold Srinagar and Pahalgam nights.'],
+  ].map(([i, t, d]) => `<li><span class="ico">${icon(i, 24)}</span><div><b>${t}</b><span class="d">${d}</span></div></li>`).join('');
 
   /* ---------- ticket cards (home + packages) ---------- */
   function cardHTML(p) {
@@ -207,22 +207,46 @@
     hydrate($('#grid')); tilt($('#grid'));
 
     $('#earliest').textContent = fmtDate(earliestDate);
+  }
+
+  /* ======================= REVIEWS (home) ======================= */
+  if ($('#revForm')) {
+    const initials = (n) => n.split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
     if (REVIEWS.length) {
-      $('#reviews').hidden = false;
-      const initials = (n) => n.split(/\s+/).map((w) => w[0]).slice(0, 2).join('');
+      $('#revTrack').hidden = false; $('#revBtns').hidden = false;
+      $('#reviews').classList.add('has-rev');
       $('#revTrack').innerHTML = REVIEWS.map((r, i) => `
         <article class="rev">
           <div class="stars" role="img" aria-label="${r.stars} out of 5 stars">${[1, 2, 3, 4, 5].map((n) => `<span class="${n > r.stars ? 'off' : ''}">${icon('star', 18)}</span>`).join('')}</div>
           <blockquote>${esc(r.text)}</blockquote>
           <footer><div class="avatar" style="background:linear-gradient(145deg,hsl(${(i * 57 + 20) % 360} 60% 44%),hsl(${(i * 57 + 60) % 360} 55% 26%))">${esc(initials(r.name))}</div>
-            <div><b>${esc(r.name)}</b><span>${esc(r.city)} · ${esc(r.trip)}</span></div></footer>
+            <div><b>${esc(r.name)}</b><span>${esc([r.city, r.trip].filter(Boolean).join(' · '))}</span></div></footer>
         </article>`).join('');
       const track = $('#revTrack');
       $('#revPrev').addEventListener('click', () => track.scrollBy({ left: -track.clientWidth * .8, behavior: 'smooth' }));
       $('#revNext').addEventListener('click', () => track.scrollBy({ left: track.clientWidth * .8, behavior: 'smooth' }));
     }
+    $('#rTrip').innerHTML = PACKAGES.map((p) => `<option value="${p.id}">${esc(p.title)}</option>`).join('');
+    $('#rRate').innerHTML = [5, 4, 3, 2, 1].map((n) => `<input type="radio" name="rate" id="rate${n}" value="${n}"${n === 5 ? ' checked' : ''}><label for="rate${n}" title="${n} star${n > 1 ? 's' : ''}">${icon('star', 28)}</label>`).join('');
+    $('#revForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = $('#rName').value.trim(), text = $('#rText').value.trim(), err = $('#rErr');
+      const msg = !name ? 'Enter your name.' : text.length < 15 ? 'Write a few words about your trip (at least 15 characters).' : '';
+      err.hidden = !msg; err.textContent = msg;
+      if (msg) return;
+      const stars = ($('#revForm').querySelector('input[name="rate"]:checked') || { value: 5 }).value;
+      const body = [
+        `New review for ${BRAND.name} website`,
+        `Name: ${name}${$('#rCity').value.trim() ? ', ' + $('#rCity').value.trim() : ''}`,
+        `Tour: ${byId($('#rTrip').value).title}`,
+        `Rating: ${stars}/5`,
+        `Review: ${text}`,
+      ].join('\n');
+      const url = waLink(body);
+      $('#rLink').href = url; $('#rDone').hidden = false;
+      window.open(url, '_blank', 'noopener');
+    });
   }
-
 
   /* ======================= PACKAGES ======================= */
   if ($('#filters')) {
@@ -440,15 +464,6 @@
       catch (e) { const r = document.createRange(); r.selectNodeContents(pre); const s = getSelection(); s.removeAllRanges(); s.addRange(r); label.textContent = 'Selected, press Ctrl+C'; }
       setTimeout(() => { label.textContent = 'Copy message'; }, 2200);
     });
-  }
-
-  /* ======================= CREDITS ======================= */
-  if ($('#credits')) {
-    $('#credits').innerHTML = PH.ids.map((id) => {
-      const c = PH.credit(id); if (!c) return '';
-      const name = id === 'hero' ? 'Srinagar (home banner)' : (STOPS[id] ? STOPS[id][0] : id);
-      return `<li><b>${esc(name)}</b><span><a href="${c.page}" target="_blank" rel="noopener">${esc(c.photographer)}</a>, ${esc(c.licence)}</span></li>`;
-    }).join('');
   }
 
   hydrate(document);

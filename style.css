@@ -606,3 +606,30 @@ a.ccard:hover { transform: translateY(-6px); }
   .panel.on { flex-grow: 3.2; }
   .panel.on .pn-txt b { font-size: 1.5rem; }
 }
+
+/* ======================= round 4: simple included tiles, review form ======================= */
+.inc-grid { gap: 16px; margin-top: 48px; }
+.inc-grid li { display: flex; gap: 16px; align-items: flex-start; padding: 20px 22px; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: none; overflow: visible; isolation: auto; }
+.inc-grid li::before, .inc-grid li::after { display: none; }
+.inc-grid li:hover { transform: none; border-color: var(--teal); }
+.inc-grid .ico { flex: none; display: grid; place-items: center; width: 46px; height: 46px; margin: 0; border-radius: 14px; background: var(--teal-soft); border: 0; box-shadow: none; color: var(--teal); }
+.inc-grid .ico svg { width: 24px; height: 24px; filter: none; }
+.inc-grid li:hover .ico svg { transform: none; }
+.inc-grid b { display: block; font-size: 1.05rem; font-weight: 700; margin-bottom: 2px; }
+.inc-grid span.d { color: var(--muted); font-size: .92rem; }
+
+.rev-wrap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+#reviews.has-rev .rev-wrap { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: start; }
+.rev-form { max-width: 640px; margin-inline: auto; width: 100%; display: grid; gap: 16px; }
+#reviews.has-rev .rev-form { margin: 0; }
+.rev-form h3 { font-size: 1.35rem; }
+.rate { border: 0; padding: 0; margin: 0; display: grid; gap: 6px; font-size: .85rem; font-weight: 600; color: var(--muted); }
+.rate legend { padding: 0; margin-bottom: 6px; }
+.rate-row { display: inline-flex; flex-direction: row-reverse; justify-content: flex-end; gap: 2px; }
+.rate-row input { position: absolute; opacity: 0; pointer-events: none; }
+.rate-row label { cursor: pointer; color: var(--line); transition: color .15s, transform .15s; display: grid; }
+.rate-row label svg { fill: currentColor; stroke: currentColor; }
+.rate-row input:checked ~ label, .rate-row label:hover, .rate-row label:hover ~ label { color: var(--accent); }
+.rate-row label:hover { transform: scale(1.12); }
+.rate-row input:focus-visible + label { outline: 2px solid var(--accent); border-radius: 6px; }
+@media (max-width: 1020px) { #reviews.has-rev .rev-wrap { grid-template-columns: minmax(0, 1fr); } }

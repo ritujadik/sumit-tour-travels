@@ -128,16 +128,34 @@
   </section>
 
 
-  <section class="section tint" id="reviews" aria-labelledby="h-rev" hidden>
+  <section class="section tint" id="reviews" aria-labelledby="h-rev">
     <div class="wrap">
       <div class="sec-head row">
-        <div><p class="eyebrow">Traveller experience</p><h2 id="h-rev">What families say <em>after</em> the trip</h2></div>
-        <div class="car-btns">
+        <div><p class="eyebrow">Reviews</p><h2 id="h-rev">What travellers <em>say</em></h2></div>
+        <div class="car-btns" id="revBtns" hidden>
           <button class="icon-btn round" id="revPrev" type="button" aria-label="Previous reviews"><svg width="20" height="20"><use href="#i-left"/></svg></button>
           <button class="icon-btn round" id="revNext" type="button" aria-label="Next reviews"><svg width="20" height="20"><use href="#i-right"/></svg></button>
         </div>
       </div>
-      <div class="rev-track" id="revTrack" tabindex="0" aria-label="Traveller reviews"></div>
+      <div class="rev-wrap">
+        <div class="rev-track" id="revTrack" tabindex="0" aria-label="Traveller reviews" hidden></div>
+        <form class="form rev-form" id="revForm" novalidate>
+          <h3>Travelled with us? Write a review</h3>
+          <p class="tagline">Your review is sent to us on WhatsApp and shown here once we approve it.</p>
+          <div class="two">
+            <label class="fld" for="rName"><span>Your name</span><input id="rName" type="text" autocomplete="name" required></label>
+            <label class="fld" for="rCity"><span>City <em>(optional)</em></span><input id="rCity" type="text" autocomplete="address-level2"></label>
+          </div>
+          <label class="fld" for="rTrip"><span>Which tour?</span><select id="rTrip"></select></label>
+          <fieldset class="rate"><legend>Your rating</legend>
+            <div class="rate-row" id="rRate"></div>
+          </fieldset>
+          <label class="fld" for="rText"><span>Your experience</span><textarea id="rText" rows="4" placeholder="What did you like about the trip?" required></textarea></label>
+          <p class="form-err" id="rErr" role="alert" hidden></p>
+          <button class="btn btn-accent btn-lg wide" type="submit"><svg width="20" height="20"><use href="#i-wa"/></svg> Send review on WhatsApp</button>
+          <p class="tagline" id="rDone" hidden><b>Thank you!</b> If WhatsApp did not open, <a id="rLink" href="#" target="_blank" rel="noopener">tap here to send it</a>.</p>
+        </form>
+      </div>
     </div>
   </section>
   <section class="cta" aria-labelledby="h-cta">
@@ -153,7 +171,7 @@
       <a class="logo foot-logo" href="index.html" aria-label="Sumit Tour &amp; Travels home"><img src="images/logo.png" alt="Sumit Tours &amp; Travels" width="78" height="84"></a>
       <p class="foot-note">Plan your vacation stress free, tension free and within your budget. Group tours from Surat across Kashmir, Himachal, Kerala, Nepal and the Char Dham circuit.</p>
     </div>
-    <nav class="foot-nav" aria-label="Footer"><a href="index.html">Home</a><a href="packages.html">Packages</a><a href="destinations.html">Destinations</a><a href="contact.html">Contact</a><a href="credits.html">Photo credits</a></nav>
+    <nav class="foot-nav" aria-label="Footer"><a href="index.html">Home</a><a href="packages.html">Packages</a><a href="destinations.html">Destinations</a><a href="contact.html">Contact</a></nav>
     <ul class="foot-contact" id="footContact"></ul>
     <p class="fine">Prices are per person and are confirmed at booking. Train tickets must be booked 60 days in advance.</p>
   </div>
